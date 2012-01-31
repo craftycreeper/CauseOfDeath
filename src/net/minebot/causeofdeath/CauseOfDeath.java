@@ -4,19 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Random;
-import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CauseOfDeath extends JavaPlugin {
 
 	protected static File dataDir = new File("plugins/CauseOfDeath");
-	protected static Logger log = Logger.getLogger("Minecraft");
 	
 	protected static Random random = new Random();
 
@@ -30,18 +24,18 @@ public class CauseOfDeath extends JavaPlugin {
 		
 		DeathMessages dm = new DeathMessages(this, dataDir + "/messages.yml");
 		if (!dm.loadMessages()) {
-			log.warning("[CauseOfDeath] Could not load message file! Aborting enable.");
+			getLogger().warning("Could not load message file! Aborting enable.");
 			return;
 		}
-		log.info("[CauseOfDeath] Loaded " + dm.getMsgs() + " death messages in " + dm.getTypes() + " sections.");
+		getLogger().info("Loaded " + dm.getMsgs() + " death messages in " + dm.getTypes() + " sections.");
 		
-		getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, new DeathListener(dm), Priority.Low, this);
+		getServer().getPluginManager().registerEvents(new DeathListener(this, dm), this);
 		
-		log.info("[CauseOfDeath] Version " + getDescription().getVersion() + " enabled.");
+		getLogger().info("Enabled.");
 	}
 	
 	public void onDisable() {
-		log.info("[CauseOfDeath] Version " + getDescription().getVersion() + " disabled.");
+		getLogger().info("Disabled.");
 	}
 	
 	private void loadConfig() {
@@ -53,10 +47,9 @@ public class CauseOfDeath extends JavaPlugin {
 		} catch (IOException e) {
 		} catch (InvalidConfigurationException e) {
 		}
-		getConfig().addDefault("colorBase", "LIGHT_PURPLE");
-		getConfig().addDefault("colorName", "GOLD");
-		getConfig().addDefault("colorWeapon", "GOLD");
-		getConfig();
+		getConfig().addDefault("color.base", "7");
+		getConfig().addDefault("color.name", "9");
+		getConfig().addDefault("color.weapon", "9");
 		getConfig().options().copyDefaults(true);
 		try {
 			getConfig().save(confFile);

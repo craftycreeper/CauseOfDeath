@@ -111,7 +111,8 @@ public class Coroner {
 		else if (damageEvent != null) {
 			String cause = damageEvent.getCause().toString().toLowerCase();
 			if (cause.equals("fire_tick")) cause = "fire";
-			causes.push(damageEvent.getCause().toString().toLowerCase());
+			if (cause.contains("explosion")) cause = "explosion";
+			causes.push(cause);
 		}
 	}
 	
@@ -119,7 +120,7 @@ public class Coroner {
         if (entity instanceof Blaze)
             return "blaze";
         if (entity instanceof CaveSpider)
-            return "cavespider";
+            return "cave_spider";
         if (entity instanceof Chicken)
             return "chicken";
         if (entity instanceof Cow)
@@ -135,13 +136,13 @@ public class Coroner {
         if (entity instanceof Giant)
             return "giant";
         if (entity instanceof MagmaCube)
-            return "magmacube";
+            return "magma_cube";
         if (entity instanceof MushroomCow)
             return "mooshroom";
         if (entity instanceof Pig)
             return "pig";
         if (entity instanceof PigZombie)
-            return "zombiepigman";
+            return "zombie_pigman";
         if (entity instanceof Sheep)
             return "sheep";
         if (entity instanceof Skeleton)

@@ -23,7 +23,6 @@ public class DeathMessages {
 	private ChatColor colorBase;
 	private ChatColor colorName;
 	private ChatColor colorWeapon;
-
 	private CauseOfDeath plugin;
 	
 	public DeathMessages(CauseOfDeath plugin, String filename) {
@@ -46,32 +45,27 @@ public class DeathMessages {
 		
 		for(String key : messageFile.getKeys(false)) {
 			types++;
-			CauseOfDeath.log.info("Death cause: " + key);
 			List<String> messages = messageFile.getStringList(key);
 			msgs += messages.size();
 			deathMessages.put(key, messages);
-			for (String msg : messages) {
-				CauseOfDeath.log.info("   Message: " + msg);
-			}
 		}
 		
 		//Colors
-		try {
-			colorBase = ChatColor.valueOf(plugin.getConfig().getString("colorBase"));
-		} catch (Exception e) {
-			CauseOfDeath.log.warning("[CauseOfDeath] Invalid colorBase value.");
+		colorBase = ChatColor.getByChar(plugin.getConfig().getString("color.base"));
+		if (colorBase == null) {
+			plugin.getLogger().warning("Invalid colorBase value.");
 			colorBase = ChatColor.WHITE;
 		}
-		try {
-			colorName = ChatColor.valueOf(plugin.getConfig().getString("colorName"));
-		} catch (Exception e) {
-			CauseOfDeath.log.warning("[CauseOfDeath] Invalid colorName value.");
+		
+		colorName = ChatColor.getByChar(plugin.getConfig().getString("color.name"));
+		if (colorName == null) {
+			plugin.getLogger().warning("Invalid colorName value.");
 			colorName = ChatColor.WHITE;
 		}
-		try {
-			colorWeapon = ChatColor.valueOf(plugin.getConfig().getString("colorWeapon"));
-		} catch (Exception e) {
-			CauseOfDeath.log.warning("[CauseOfDeath] Invalid colorWeapon value.");
+		
+		colorWeapon = ChatColor.getByChar(plugin.getConfig().getString("color.weapon"));
+		if (colorWeapon == null) {
+			plugin.getLogger().warning("Invalid colorWeapon value.");
 			colorWeapon = ChatColor.WHITE;
 		}
 		
@@ -112,7 +106,7 @@ public class DeathMessages {
 				String creatureType = coroner.getCreatureType(killer);
 				if (creatureType != null)
 					message = message.replace("%k", colorName +
-						creatureType + colorBase);
+						creatureType.replace("_", " ") + colorBase);
 			}
 		}
 		
