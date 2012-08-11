@@ -21,7 +21,7 @@ public class DeathListener implements Listener {
 		this.dm = dm;
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityDeath(EntityDeathEvent event) {
 		if (!(event.getEntity() instanceof Player)) return;
 		

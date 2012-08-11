@@ -163,6 +163,10 @@ public class Coroner {
             return "zombie";
         if (entity instanceof Wolf)
             return "wolf";
+        if (entity instanceof IronGolem)
+        	return "iron_golem";
+        if (entity instanceof Ocelot)
+        	return "ocelot";
         
         return null;
 	}
