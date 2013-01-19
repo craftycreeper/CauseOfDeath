@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import org.bukkit.Material;
 import org.bukkit.entity.*;
+import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -145,8 +146,12 @@ public class Coroner {
             return "zombie_pigman";
         if (entity instanceof Sheep)
             return "sheep";
-        if (entity instanceof Skeleton)
-            return "skeleton";
+        if (entity instanceof Skeleton) {
+        	if (((Skeleton)entity).getSkeletonType() == SkeletonType.WITHER)
+        		return "wither_skeleton";
+        	else 
+        		return "skeleton";
+        }
         if (entity instanceof Slime)
             return "slime";
         if (entity instanceof Silverfish)
@@ -167,6 +172,10 @@ public class Coroner {
         	return "iron_golem";
         if (entity instanceof Ocelot)
         	return "ocelot";
+        if (entity instanceof Bat)
+        	return "bat";
+        if (entity instanceof Witch)
+        	return "witch";
         
         return null;
 	}

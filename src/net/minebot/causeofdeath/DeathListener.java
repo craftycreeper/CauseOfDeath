@@ -2,8 +2,6 @@ package net.minebot.causeofdeath;
 
 import java.util.Stack;
 
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.craftbukkit.command.ColouredConsoleSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,8 +29,6 @@ public class DeathListener implements Listener {
 		
 		if (message != null) {
 			((PlayerDeathEvent)event).setDeathMessage(message);
-			ConsoleCommandSender ccs = ColouredConsoleSender.getInstance();
-			ccs.sendMessage("[CauseOfDeath] " + message);
 		}
 		else {
 			//Leave it alone, but note why we couldn't make a message
