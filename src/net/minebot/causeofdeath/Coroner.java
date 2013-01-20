@@ -40,19 +40,19 @@ public class Coroner {
 	}
 	
 	private void determineCause(EntityDeathEvent event) {
-		causes.push("generic"); //Fallback in case nothing else turns up
+		causes.push("generic"); // Fallback in case nothing else turns up
 		
-		//Raw cause of death
+		// Raw cause of death
 		EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
 		
-		//Damage by another entity?
+		// Damage by another entity?
 		if (damageEvent instanceof EntityDamageByEntityEvent) {
 			causes.push("entity");
 			Entity damager = ((EntityDamageByEntityEvent) damageEvent).getDamager();
 			killer = damager;
 			
 			if (damager instanceof Player) {
-				//A murder most foul!
+				// A murder most foul!
 				causes.push("pvp");
 				Material weaponType = ((Player)damager).getItemInHand().getType();
 				
@@ -66,13 +66,15 @@ public class Coroner {
 			}
 			
 			else if (damager instanceof Creature || damager instanceof Slime) {
-				//Slain by monster
+				// Slain by monster
 				causes.push("monster");
 				
 				if (damager instanceof Tameable && ((Tameable)damager).isTamed()) {
-					//PVP Wolf attack?
+					// PVP Wolf attack?
+					causes.push("pvp");
 					causes.push("pvp_wolf");
 					wolfOwner = (Player)((Tameable)damager).getOwner();
+					weapon = "wolf";
 				}
 				else {
 					String mobType = getCreatureType(damager);
@@ -81,14 +83,19 @@ public class Coroner {
 			}
 			
 			else if (damager instanceof Projectile) {
-				//Arrow or other projectile
+				// Arrow or other projectile
 				causes.push("projectile");
 				if (damager instanceof Arrow) {
 					causes.push("arrow");
 				}
 				else if (damager instanceof Fireball) {
-					//probable Ghast
+					// Probable Ghast
 					causes.push("fireball");
+				}
+				else if (damager instanceof EnderPearl) {
+					causes.push("ender_pearl");
+					// Don't need pvp types
+					return;
 				}
 				if (((Projectile) damager).getShooter() instanceof Player) {
 					causes.push("pvp");
@@ -106,7 +113,15 @@ public class Coroner {
 				causes.push("explosion");
 				causes.push("tnt");
 			}
+			
+			else if (damager instanceof FallingBlock) {
+				causes.push("falling_block");
+				if (((FallingBlock)damager).getMaterial() == Material.ANVIL) {
+					causes.push("anvil");
+				}
+			}
 		}
+		
 		
 		//All other death causes
 		else if (damageEvent != null) {
@@ -115,6 +130,14 @@ public class Coroner {
 			if (cause.contains("explosion")) cause = "explosion";
 			causes.push(cause);
 		}
+		
+		/*
+		StringBuilder meh = new StringBuilder();
+		for (String cause : causes) {
+			meh.append(" " + cause);
+		}
+		System.out.println("DEBUG:" + meh.toString());
+		*/
 	}
 	
 	public String getCreatureType(Entity entity) {
