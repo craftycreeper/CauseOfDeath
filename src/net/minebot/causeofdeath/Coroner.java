@@ -92,6 +92,10 @@ public class Coroner {
 					// Probable Ghast
 					causes.push("fireball");
 				}
+				else if (damager instanceof WitherSkull) {
+					// Wither skull damage
+					causes.push("wither_skull");
+				}
 				else if (damager instanceof EnderPearl) {
 					causes.push("ender_pearl");
 					// Don't need pvp types
@@ -199,6 +203,8 @@ public class Coroner {
         	return "bat";
         if (entity instanceof Witch)
         	return "witch";
+        if (entity instanceof Wither)
+        	return "wither";
         
         return null;
 	}
